@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ReactNode } from "react";
 import { getAssetPath } from "../lib/utils";
 
 interface ServicePageProps {

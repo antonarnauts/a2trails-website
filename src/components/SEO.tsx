@@ -30,9 +30,9 @@ export default function SEO({
     let base = '/';
     
     if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
-      const pathSegments = window.location.pathname.split('/');
-      if (pathSegments.length > 1 && pathSegments[1]) {
-        base = `/${pathSegments[1]}/`;
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      if (pathSegments.length > 0) {
+        base = `/${pathSegments[0]}/`;
       }
     }
     

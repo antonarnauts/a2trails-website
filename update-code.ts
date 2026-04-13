@@ -25,9 +25,9 @@ walk(srcDir, (filePath) => {
     extensionsToReplace.forEach(ext => {
       // Escape the dot in extension for regex
       const escapedExt = ext.replace('.', '\\.');
-      const regex = new RegExp(`/images/([^"\'\\s)]+)${escapedExt}`, 'g');
+      const regex = new RegExp(`images/([^"\'\\s)]+)${escapedExt}`, 'g');
       if (regex.test(content)) {
-        content = content.replace(regex, `/images/$1.webp`);
+        content = content.replace(regex, `images/$1.webp`);
         changed = true;
       }
     });
