@@ -32,8 +32,8 @@ export default function SEO({
     if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
       const pathSegments = window.location.pathname.split('/').filter(Boolean);
       if (pathSegments.length > 0) {
-        // Lowercase the repository name as requested
-        base = `/${pathSegments[0].toLowerCase()}/`;
+        // Use the repository name exactly as it appears in the URL
+        base = `/${pathSegments[0]}/`;
       }
     }
     

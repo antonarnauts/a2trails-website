@@ -22,6 +22,7 @@ export const ServicePageTemplate = ({ title, description, longDescription, featu
             src={getAssetPath(image)}
             alt={title}
             className="w-full h-full object-cover"
+            crossOrigin="anonymous"
           />
           <div className="absolute inset-0 bg-brand-dark"></div>
         </div>
@@ -72,6 +73,7 @@ export const ServicePageTemplate = ({ title, description, longDescription, featu
                 src={getAssetPath(image)}
                 alt={title}
                 className="w-full h-full object-cover"
+                crossOrigin="anonymous"
               />
             </motion.div>
           </div>
