@@ -1,6 +1,8 @@
 export function getAssetPath(path: string) {
-  const base = import.meta.env.BASE_URL || '/';
-  // Remove leading slash from path if it exists to avoid double slashes
+  // Remove leading slash from path if it exists
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${base}${cleanPath}`;
+  
+  // Return the path as-is. Since we use HashRouter, the base URL is always the same 
+  // relative to the index.html file, making relative paths robust.
+  return cleanPath;
 }

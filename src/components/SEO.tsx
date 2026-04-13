@@ -24,12 +24,30 @@ export default function SEO({
   const defaultDescription = 'A2Trails specializes in the consultancy, design, and construction of sustainable mountain bike trails, pump tracks, and skill parks across Europe.';
   const metaDescription = description || defaultDescription;
 
+  // Helper to get absolute URL for meta tags
+  const getAbsoluteImageUrl = (path: string) => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://a2trails.com';
+    let base = '/';
+    
+    if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
+      const pathSegments = window.location.pathname.split('/');
+      if (pathSegments.length > 1 && pathSegments[1]) {
+        base = `/${pathSegments[1]}/`;
+      }
+    }
+    
+    return `${origin}${base}${path}`;
+  };
+
+  const logoUrl = getAbsoluteImageUrl('images/a2trailslogo.webp');
+  const heroUrl = getAbsoluteImageUrl('images/a2trails-hero-background.webp');
+
   // Local Business Schema
   const businessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "A2Trails",
-    "image": "https://a2trails.com/images/a2trailslogo.webp",
+    "image": logoUrl,
     "@id": "https://a2trails.com",
     "url": "https://a2trails.com",
     "telephone": "+3200000000",
@@ -77,13 +95,13 @@ export default function SEO({
       <meta property="og:description" content={metaDescription} />
       <meta property="og:url" content={canonical} />
       <meta property="og:site_name" content={siteName} />
-      <meta property="og:image" content="https://a2trails.com/images/a2trails-hero-background.webp" />
+      <meta property="og:image" content={heroUrl} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={metaDescription} />
-      <meta name="twitter:image" content="https://a2trails.com/images/a2trails-hero-background.webp" />
+      <meta name="twitter:image" content={heroUrl} />
 
       {/* Structured Data */}
       <script type="application/ld+json">

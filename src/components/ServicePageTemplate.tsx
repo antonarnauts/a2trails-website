@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ReactNode } from "react";
+import { getAssetPath } from "../lib/utils";
 
 interface ServicePageProps {
   title: string;
@@ -18,7 +18,7 @@ export const ServicePageTemplate = ({ title, description, longDescription, featu
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-20">
           <img
-            src={image}
+            src={getAssetPath(image)}
             alt={title}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
@@ -69,7 +69,7 @@ export const ServicePageTemplate = ({ title, description, longDescription, featu
               className="relative rounded-2xl overflow-hidden aspect-video shadow-2xl"
             >
               <img
-                src={image}
+                src={getAssetPath(image)}
                 alt={title}
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
