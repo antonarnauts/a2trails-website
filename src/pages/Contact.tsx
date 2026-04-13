@@ -18,6 +18,7 @@ const ContactInfoItem = ({ icon: Icon, label, value }: { icon: any, label: strin
 
 export default function Contact() {
   const { t } = useTranslation();
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,18 +26,40 @@ export default function Contact() {
     details: ""
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // In a real application, this would send the data to a backend service
-    console.log("Form submitted to antonarnauts@a2trails.com:", formData);
-    alert(t('contact.success'));
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      projectType: "",
-      details: ""
-    });
+    setStatus('sending');
+
+    try {
+      const response = await fetch("https://formspree.io/antonarnauts@a2trails.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          ...formData,
+          _subject: `New Contact Form Submission from ${formData.name}`
+        }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({
+          name: "",
+          email: "",
+          projectType: "",
+          details: ""
+        });
+        // Reset status after 5 seconds
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setStatus('error');
+    }
   };
 
   return (
@@ -121,13 +144,35 @@ export default function Contact() {
             >
               <div className="bg-brand-card p-8 md:p-10 rounded-3xl border border-white/5 shadow-2xl">
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {status === 'success' && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400 text-sm font-medium"
+                    >
+                      {t('contact.form.success')}
+                    </motion.div>
+                  )}
+
+                  {status === 'error' && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-medium"
+                    >
+                      Something went wrong. Please try again or email us directly.
+                    </motion.div>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-gray-300">{t('contact.form.name')}</label>
                       <input 
                         type="text" 
+                        name="name"
                         required
-                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors"
+                        disabled={status === 'sending'}
+                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors disabled:opacity-50"
                         placeholder={t('contact.form.namePlaceholder')}
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -137,8 +182,10 @@ export default function Contact() {
                       <label className="text-sm font-bold text-gray-300">{t('contact.form.email')}</label>
                       <input 
                         type="email" 
+                        name="email"
                         required
-                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors"
+                        disabled={status === 'sending'}
+                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors disabled:opacity-50"
                         placeholder={t('contact.form.emailPlaceholder')}
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -150,8 +197,10 @@ export default function Contact() {
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-gray-300">{t('contact.form.projectType')}</label>
                       <select 
+                        name="projectType"
                         required
-                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors appearance-none"
+                        disabled={status === 'sending'}
+                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors appearance-none disabled:opacity-50"
                         value={formData.projectType}
                         onChange={(e) => setFormData({...formData, projectType: e.target.value})}
                       >
@@ -167,9 +216,11 @@ export default function Contact() {
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-gray-300">{t('contact.form.details')}</label>
                     <textarea 
+                      name="details"
                       required
+                      disabled={status === 'sending'}
                       rows={6}
-                      className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors resize-none"
+                      className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors resize-none disabled:opacity-50"
                       placeholder={t('contact.form.detailsPlaceholder')}
                       value={formData.details}
                       onChange={(e) => setFormData({...formData, details: e.target.value})}
@@ -178,10 +229,11 @@ export default function Contact() {
 
                   <button 
                     type="submit"
-                    className="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange/90 text-white px-10 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all group"
+                    disabled={status === 'sending'}
+                    className="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange/90 text-white px-10 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {t('contact.form.submit')}
-                    <Send className="h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    {status === 'sending' ? 'Sending...' : t('contact.form.submit')}
+                    {status !== 'sending' && <Send className="h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
                   </button>
                 </form>
               </div>

@@ -15,30 +15,26 @@ function walk(dir: string, callback: (filePath: string) => void) {
   });
 }
 
+const extensionsToReplace = ['.png', '.jpg', '.jpeg'];
+
 walk(srcDir, (filePath) => {
   if (filePath.endsWith('.tsx') || filePath.endsWith('.ts') || filePath.endsWith('.css')) {
     let content = fs.readFileSync(filePath, 'utf8');
     let changed = false;
     
-    // Replace "/images/" with "images/" (relative)
-    // We look for src="/images/..." or url("/images/...")
-    const regex = /"\/images\//g;
-    if (regex.test(content)) {
-      content = content.replace(regex, '"images/');
-      changed = true;
-    }
+    extensionsToReplace.forEach(ext => {
+      // Escape the dot in extension for regex
+      const escapedExt = ext.replace('.', '\\.');
+      const regex = new RegExp(`/images/([^"\'\\s)]+)${escapedExt}`, 'g');
+      if (regex.test(content)) {
+        content = content.replace(regex, `/images/$1.webp`);
+        changed = true;
+      }
+    });
     
-    // Also check for single quotes
-    const regexSingle = /'\/images\//g;
-    if (regexSingle.test(content)) {
-      content = content.replace(regexSingle, "'images/");
-      changed = true;
-    }
-
     if (changed) {
-      console.log(`Updating paths in ${filePath}...`);
+      console.log(`Updating ${filePath}...`);
       fs.writeFileSync(filePath, content);
     }
   }
 });
-console.log('Path update complete.');

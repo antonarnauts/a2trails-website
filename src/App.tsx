@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { Mountain, Waves, Target, ArrowRight, Menu, X, ClipboardList, DraftingCompass, HardHat, ChevronDown, Facebook, Instagram, Mail, Phone, FileText, Zap, Bike } from "lucide-react";
 import { useState, useEffect } from "react";
-import { HashRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 import SEO from "./components/SEO";
 
@@ -74,7 +74,7 @@ const Navbar = () => {
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center">
               <img 
-                src="images/A2TrailsLogo.webp" 
+                src="/images/A2TrailsLogo.webp" 
                 alt="A2Trails - Sustainable Mountain Bike Trail Building Logo" 
                 className="h-[60px] w-auto" 
                 referrerPolicy="no-referrer"
@@ -178,7 +178,7 @@ const Hero = () => {
       {/* Hero Background */}
       <div className="absolute inset-0 z-0">
         <img
-          src="images/A2trails-hero-background.webp"
+          src="/images/A2trails-hero-background.webp"
           alt="Professional mountain bike trail construction background"
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
@@ -389,7 +389,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <div className="mb-6">
               <img 
-                src="images/A2TrailsLogo.webp" 
+                src="/images/A2TrailsLogo.webp" 
                 alt="A2Trails - Mountain Bike Infrastructure Experts" 
                 className="h-[60px] w-auto" 
                 referrerPolicy="no-referrer"
@@ -476,7 +476,7 @@ const HomePage = () => (
 
 export default function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <ScrollToTop />
       <div className="min-h-screen bg-brand-dark">
         <Navbar />
@@ -495,6 +495,6 @@ export default function App() {
         </main>
         <Footer />
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
