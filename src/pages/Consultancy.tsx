@@ -24,7 +24,6 @@ const ServiceSection = ({ title, description, features, image, imageRight = fals
         alt={`${title} - A2Trails Consultancy Service`} 
         className="w-full h-full object-cover" 
         loading="lazy"
-        referrerPolicy="no-referrer"
       />
     </motion.div>
     <motion.div 

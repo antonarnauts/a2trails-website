@@ -30,11 +30,9 @@ export default function SEO({
     let base = '/';
     
     if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
-      const pathSegments = window.location.pathname.split('/').filter(Boolean);
-      if (pathSegments.length > 0) {
-        // Lowercase the repository name as requested to remove all capital letters
-        base = `/${pathSegments[0].toLowerCase()}/`;
-      }
+      const pathname = window.location.pathname;
+      // Get the base path (e.g., /repo-name/) preserving case
+      base = pathname.endsWith('/') ? pathname : pathname.substring(0, pathname.lastIndexOf('/') + 1);
     }
     
     return `${origin}${base}${path}`;
