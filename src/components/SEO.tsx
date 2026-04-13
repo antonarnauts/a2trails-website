@@ -40,8 +40,8 @@ export default function SEO({
     return `${origin}${base}${path}`;
   };
 
-  const logoUrl = getAbsoluteImageUrl('images/a2trailslogo.webp');
-  const heroUrl = getAbsoluteImageUrl('images/a2trails-hero-background.webp');
+  const logoUrl = getAbsoluteImageUrl('images/logo.webp');
+  const heroUrl = getAbsoluteImageUrl('images/hero.webp');
 
   // Local Business Schema
   const businessSchema = {

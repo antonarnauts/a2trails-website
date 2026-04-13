@@ -90,7 +90,7 @@ export default function Construction() {
             id="pumptracks"
             title={t('services.construction.pumptracks.title')}
             description={t('services.construction.pumptracks.desc')}
-            image="images/image-pumptracks.webp"
+            image="images/pumptracks.webp"
             features={t('services.construction.pumptracks.features', { returnObjects: true }) as string[]}
           />
           
@@ -98,7 +98,7 @@ export default function Construction() {
             id="mtb-trails"
             title={t('services.construction.mtbTrails.title')}
             description={t('services.construction.mtbTrails.desc')}
-            image="images/image-trails2.webp"
+            image="images/trails.webp"
             imageRight={true}
             features={t('services.construction.mtbTrails.features', { returnObjects: true }) as string[]}
           />
@@ -107,7 +107,7 @@ export default function Construction() {
             id="jump-tracks"
             title={t('services.construction.jumpTracks.title')}
             description={t('services.construction.jumpTracks.desc')}
-            image="images/image-jumptracks.webp"
+            image="images/jumptracks.webp"
             features={t('services.construction.jumpTracks.features', { returnObjects: true }) as string[]}
           />
 
@@ -115,7 +115,7 @@ export default function Construction() {
             id="skill-tracks"
             title={t('services.construction.skillTracks.title')}
             description={t('services.construction.skillTracks.desc')}
-            image="images/image-skills.webp"
+            image="images/skills.webp"
             imageRight={true}
             features={t('services.construction.skillTracks.features', { returnObjects: true }) as string[]}
           />
@@ -124,7 +124,7 @@ export default function Construction() {
             id="bmx-tracks"
             title={t('services.construction.bmxTracks.title')}
             description={t('services.construction.bmxTracks.desc')}
-            image="images/image-bmx.webp"
+            image="images/bmx.webp"
             features={t('services.construction.bmxTracks.features', { returnObjects: true }) as string[]}
           />
 
