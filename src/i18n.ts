@@ -168,7 +168,8 @@ i18n
               details: 'Project Details *',
               detailsPlaceholder: 'Tell us about your project, location, timeline, and any specific requirements...',
               submit: 'Send Message',
-              success: 'Thank you for your message! We have received your request and will get back to you at antonarnauts@a2trails.com soon.',
+              success: 'Thank you for your message! We have received your request and will get back to you soon.',
+              error: 'Something went wrong. Please ensure you have verified your email with Formspree or contact us directly at antonarnauts@a2trails.com.',
             },
           },
           services: {
@@ -590,7 +591,8 @@ i18n
               details: 'Projectdetails *',
               detailsPlaceholder: 'Vertel ons over uw project, locatie, tijdlijn en eventuele specifieke vereisten...',
               submit: 'Bericht Verzenden',
-              success: 'Bedankt voor uw bericht! We hebben uw aanvraag ontvangen en nemen snel contact met u op via antonarnauts@a2trails.com.',
+              success: 'Bedankt voor uw bericht! We hebben uw aanvraag ontvangen en nemen snel contact met u op.',
+              error: 'Er is iets misgegaan. Zorg ervoor dat u uw e-mailadres heeft geverifieerd bij Formspree of neem direct contact met ons op via antonarnauts@a2trails.com.',
             },
           },
           services: {

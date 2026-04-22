@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { Mail, MapPin, Send, FileText } from "lucide-react";
-import { useState, FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { useForm, ValidationError } from '@formspree/react';
 import SEO from "../components/SEO";
 
 const ContactInfoItem = ({ icon: Icon, label, value }: { icon: any, label: string, value: string }) => (
@@ -18,49 +18,7 @@ const ContactInfoItem = ({ icon: Icon, label, value }: { icon: any, label: strin
 
 export default function Contact() {
   const { t } = useTranslation();
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    projectType: "",
-    details: ""
-  });
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setStatus('sending');
-
-    try {
-      const response = await fetch("https://formspree.io/antonarnauts@a2trails.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          ...formData,
-          _subject: `New Contact Form Submission from ${formData.name}`
-        }),
-      });
-
-      if (response.ok) {
-        setStatus('success');
-        setFormData({
-          name: "",
-          email: "",
-          projectType: "",
-          details: ""
-        });
-        // Reset status after 5 seconds
-        setTimeout(() => setStatus('idle'), 5000);
-      } else {
-        setStatus('error');
-      }
-    } catch (error) {
-      console.error("Form submission error:", error);
-      setStatus('error');
-    }
-  };
+  const [state, handleSubmit] = useForm('xbdqprro');
 
   return (
     <div className="pt-32 bg-brand-dark min-h-screen">
@@ -143,99 +101,105 @@ export default function Contact() {
               className="lg:col-span-8"
             >
               <div className="bg-brand-card p-8 md:p-10 rounded-3xl border border-white/5 shadow-2xl">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {status === 'success' && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400 text-sm font-medium"
-                    >
-                      {t('contact.form.success')}
-                    </motion.div>
-                  )}
-
-                  {status === 'error' && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-medium"
-                    >
-                      Something went wrong. Please try again or email us directly.
-                    </motion.div>
-                  )}
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-300">{t('contact.form.name')}</label>
-                      <input 
-                        type="text" 
-                        name="name"
-                        required
-                        disabled={status === 'sending'}
-                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors disabled:opacity-50"
-                        placeholder={t('contact.form.namePlaceholder')}
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-300">{t('contact.form.email')}</label>
-                      <input 
-                        type="email" 
-                        name="email"
-                        required
-                        disabled={status === 'sending'}
-                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors disabled:opacity-50"
-                        placeholder={t('contact.form.emailPlaceholder')}
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-300">{t('contact.form.projectType')}</label>
-                      <select 
-                        name="projectType"
-                        required
-                        disabled={status === 'sending'}
-                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors appearance-none disabled:opacity-50"
-                        value={formData.projectType}
-                        onChange={(e) => setFormData({...formData, projectType: e.target.value})}
-                      >
-                        <option value="" disabled>{t('contact.form.projectTypePlaceholder')}</option>
-                        <option value="consultancy">{t('nav.consultancy')}</option>
-                        <option value="design">{t('nav.design')}</option>
-                        <option value="construction">{t('nav.construction')}</option>
-                        <option value="designBuild">{t('nav.designBuild')}</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-gray-300">{t('contact.form.details')}</label>
-                    <textarea 
-                      name="details"
-                      required
-                      disabled={status === 'sending'}
-                      rows={6}
-                      className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors resize-none disabled:opacity-50"
-                      placeholder={t('contact.form.detailsPlaceholder')}
-                      value={formData.details}
-                      onChange={(e) => setFormData({...formData, details: e.target.value})}
-                    ></textarea>
-                  </div>
-
-                  <button 
-                    type="submit"
-                    disabled={status === 'sending'}
-                    className="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange/90 text-white px-10 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+                {state.succeeded ? (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-12"
                   >
-                    {status === 'sending' ? 'Sending...' : t('contact.form.submit')}
-                    {status !== 'sending' && <Send className="h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
-                  </button>
-                </form>
+                    <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Send className="h-10 w-10 text-green-500" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">{t('contact.form.success')}</h3>
+                    <button 
+                      onClick={() => window.location.reload()} 
+                      className="text-brand-orange hover:underline font-medium"
+                    >
+                      Send another message
+                    </button>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    {state.errors && state.errors.length > 0 && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-medium"
+                      >
+                        {t('contact.form.error')}
+                      </motion.div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-300">{t('contact.form.name')}</label>
+                        <input 
+                          type="text" 
+                          id="name"
+                          name="name"
+                          required
+                          className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors disabled:opacity-50"
+                          placeholder={t('contact.form.namePlaceholder')}
+                        />
+                        <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-500 text-xs mt-1" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-300">{t('contact.form.email')}</label>
+                        <input 
+                          type="email" 
+                          id="email"
+                          name="email"
+                          required
+                          className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors disabled:opacity-50"
+                          placeholder={t('contact.form.emailPlaceholder')}
+                        />
+                        <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-500 text-xs mt-1" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-300">{t('contact.form.projectType')}</label>
+                        <select 
+                          id="projectType"
+                          name="projectType"
+                          required
+                          className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors appearance-none disabled:opacity-50"
+                          defaultValue=""
+                        >
+                          <option value="" disabled>{t('contact.form.projectTypePlaceholder')}</option>
+                          <option value="consultancy">{t('nav.consultancy')}</option>
+                          <option value="design">{t('nav.design')}</option>
+                          <option value="construction">{t('nav.construction')}</option>
+                          <option value="designBuild">{t('nav.designBuild')}</option>
+                        </select>
+                        <ValidationError prefix="Project Type" field="projectType" errors={state.errors} className="text-red-500 text-xs mt-1" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-gray-300">{t('contact.form.details')}</label>
+                      <textarea 
+                        id="details"
+                        name="details"
+                        required
+                        rows={6}
+                        className="w-full bg-brand-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange transition-colors resize-none disabled:opacity-50"
+                        placeholder={t('contact.form.detailsPlaceholder')}
+                      ></textarea>
+                      <ValidationError prefix="Details" field="details" errors={state.errors} className="text-red-500 text-xs mt-1" />
+                    </div>
+
+                    <button 
+                      type="submit"
+                      disabled={state.submitting}
+                      className="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange/90 text-white px-10 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {state.submitting ? 'Sending...' : t('contact.form.submit')}
+                      {!state.submitting && <Send className="h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
+                    </button>
+                  </form>
+                )}
               </div>
             </motion.div>
           </div>

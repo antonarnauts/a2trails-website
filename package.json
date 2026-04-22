@@ -11,6 +11,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@formspree/react": "^3.0.0",
     "@google/genai": "^1.44.0",
     "d3": "^7.9.0",
     "dotenv": "^17.2.3",
